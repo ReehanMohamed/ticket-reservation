@@ -1,0 +1,21 @@
+# Maven
+target/
+mvnw
+.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Environment configuration and secrets
+src/main/resources/application.properties
+
+# OS files
+.DS_Store
+Thumbs.db
