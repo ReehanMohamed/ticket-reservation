@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>TicketHub | Event Reservations</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">T</span><span>TicketHub</span></a>
+    <div class="top-actions">
+      <span id="session-label" class="session-label">Not signed in</span>
+      <button id="logout-btn" class="btn btn-ghost hidden" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="auth-view" class="auth-layout">
+      <div class="hero">
+        <p class="eyebrow">YOUR NEXT EXPERIENCE STARTS HERE</p>
+        <h1>Find your next<br><span>great event.</span></h1>
+        <p class="hero-copy">Discover events, reserve your seats and manage your tickets from one place.</p>
+        <div class="hero-stats"><div><strong>Simple</strong><small>Booking</small></div><div><strong>Secure</strong><small>JWT access</small></div><div><strong>Any device</strong><small>Responsive UI</small></div></div>
+      </div>
+
+      <div class="auth-card">
+        <div class="tabs">
+          <button class="tab active" data-auth-tab="login" type="button">Login</button>
+          <button class="tab" data-auth-tab="register" type="button">Create account</button>
+        </div>
+        <form id="login-form" class="auth-form">
+          <h2>Welcome back</h2><p class="muted">Sign in to continue to TicketHub.</p>
+          <label>Username<input id="login-username" name="username" autocomplete="username" required></label>
+          <label>Password<input id="login-password" name="password" type="password" autocomplete="current-password" required></label>
+          <button class="btn btn-primary full" type="submit">Sign in</button>
+          <div class="demo-box">
+            <strong>Demo account shortcuts</strong>
+            <p class="muted tiny">Set the demo credentials in <code>app.js</code> before using these buttons.</p>
+            <div class="demo-buttons">
+              <button type="button" class="btn btn-small btn-soft" data-demo="ADMIN">Admin</button>
+              <button type="button" class="btn btn-small btn-soft" data-demo="ORGANIZER">Organizer</button>
+              <button type="button" class="btn btn-small btn-soft" data-demo="CUSTOMER">Customer</button>
+            </div>
+          </div>
+        </form>
+
+        <form id="register-form" class="auth-form hidden">
+          <h2>Create your account</h2><p class="muted">New accounts are registered as customers.</p>
+          <label>Username<input id="register-username" name="username" required></label>
+          <label>Full name<input id="register-fullname" name="fullName" required></label>
+          <label>Password<input id="register-password" name="password" type="password" minlength="6" required></label>
+          <button class="btn btn-primary full" type="submit">Register</button>
+        </form>
+        <div id="auth-message" class="message hidden" role="alert"></div>
+      </div>
+    </section>
+
+    <section id="app-view" class="hidden">
+      <div class="welcome-row">
+        <div><p class="eyebrow">TICKETHUB DASHBOARD</p><h1 id="welcome-title">Welcome</h1><p class="muted" id="welcome-subtitle">Manage events and reservations.</p></div>
+        <span id="role-pill" class="role-pill">USER</span>
+      </div>
+
+      <nav class="nav-tabs" aria-label="Dashboard sections">
+        <button class="nav-tab active" data-panel="events-panel" type="button">Events</button>
+        <button class="nav-tab" data-panel="reservations-panel" type="button">Reservations</button>
+        <button class="nav-tab admin-only hidden" data-panel="users-panel" type="button">Users</button>
+        <button class="nav-tab admin-only hidden" data-panel="stats-panel" type="button">Statistics</button>
+      </nav>
+
+      <section id="events-panel" class="panel">
+        <div class="section-heading"><div><h2>Explore events</h2><p class="muted">Search and manage available events.</p></div>
+          <button id="show-event-form" class="btn btn-primary staff-only hidden" type="button">＋ Create event</button></div>
+        <div class="toolbar"><input id="event-search" placeholder="Search events by name..." aria-label="Search events"><button id="search-events" class="btn btn-soft" type="button">Search</button><button id="refresh-events" class="btn btn-ghost" type="button">Refresh</button></div>
+        <form id="event-form" class="form-card hidden">
+          <div class="section-heading"><h3 id="event-form-title">Create event</h3><button id="close-event-form" class="icon-btn" type="button" aria-label="Close">×</button></div>
+          <input id="event-id" type="hidden">
+          <div class="form-grid">
+            <label>Event name<input id="event-name" required></label>
+            <label>Venue<input id="event-venue" required></label>
+            <label>Description<input id="event-description"></label>
+            <label>Date and time<input id="event-date" type="datetime-local" required></label>
+            <label>Total seats<input id="event-total-seats" type="number" min="1" required></label>
+            <label>Ticket price<input id="event-price" type="number" min="0" step="0.01" required></label>
+          </div>
+          <div class="form-actions"><button class="btn btn-primary" type="submit">Save event</button><button id="cancel-event-form" class="btn btn-ghost" type="button">Cancel</button></div>
+        </form>
+        <div id="events-list" class="card-grid"></div>
+        <div id="events-empty" class="empty-state hidden">No events found. Try another search.</div>
+      </section>
+
+      <section id="reservations-panel" class="panel hidden">
+        <div class="section-heading"><div><h2>Reservations</h2><p class="muted" id="reservations-description">Your ticket bookings.</p></div><button id="refresh-reservations" class="btn btn-soft" type="button">Refresh</button></div>
+        <div id="reservations-list" class="table-wrap"></div>
+        <div id="reservations-empty" class="empty-state hidden">No reservations to display.</div>
+      </section>
+
+      <section id="users-panel" class="panel hidden">
+        <div class="section-heading"><div><h2>User management</h2><p class="muted">View, update and remove user accounts.</p></div><button id="refresh-users" class="btn btn-soft" type="button">Refresh</button></div>
+        <div id="users-list" class="table-wrap"></div>
+      </section>
+
+      <section id="stats-panel" class="panel hidden">
+        <div class="section-heading"><div><h2>Statistics</h2><p class="muted">Overview of TicketHub activity.</p></div><button id="refresh-stats" class="btn btn-soft" type="button">Refresh</button></div>
+        <div id="stats-list" class="stats-grid"></div>
+      </section>
+    </section>
+    <div id="global-message" class="toast hidden" role="status"></div>
+  </main>
+  <footer>TicketHub · Full-Stack Software Development Lab 09</footer>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

@@ -1,13 +1,27 @@
-package com.example.ticketreservation.repository; 
-import com.example.ticketreservation.model.Reservation; 
-import com.example.ticketreservation.model.ReservationStatus; 
-import org.springframework.data.mongodb.repository.MongoRepository; 
-import java.util.List; 
+package com.example.ticketreservation.repository;
 
-public interface ReservationRepository extends MongoRepository<Reservation,String>{
+import com.example.ticketreservation.model.Reservation;
+import com.example.ticketreservation.model.ReservationStatus;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.List;
+
+public interface ReservationRepository
+    extends MongoRepository<Reservation, String> {
+
     List<Reservation> findByCustomerId(String customerId);
-    List<Reservation> findByEventId(String eventId);
-    List<Reservation> findByStatus(ReservationStatus status);
-    boolean existsByEventIdAndStatus(String eventId,ReservationStatus status); 
 
+    List<Reservation> findByEventId(String eventId);
+
+    List<Reservation> findByStatus(ReservationStatus status);
+
+    boolean existsByEventIdAndStatus(
+        String eventId,
+        ReservationStatus status
+    );
+
+    boolean existsByCustomerIdAndStatus(
+        String customerId,
+        ReservationStatus status
+    );
 }
